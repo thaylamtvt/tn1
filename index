@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thí Nghiệm Mô Phỏng Định Luật Ôm</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 30px 15px; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { color: #1e293b; margin-top: 0; text-align: center; font-size: 20px; }
+        .control-group { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; color: #334155; }
+        input[type=range] { width: 100%; cursor: pointer; }
+        .bulb-container { text-align: center; margin: 25px 0; }
+        .bulb { width: 70px; height: 70px; border-radius: 50%; background: #cbd5e1; display: inline-block; transition: all 0.1s ease; }
+        .result-box { background: #e0f2fe; padding: 15px; border-radius: 8px; text-align: center; }
+        .result-val { font-size: 26px; font-weight: bold; color: #0284c7; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>MÔ PHỎNG ĐỊNH LUẬT ÔM</h2>
+        
+        <div class="control-group">
+            <label>Hiệu điện thế (U): <span id="u-val">6</span> V</label>
+            <input type="range" id="u-range" min="0" max="12" value="6" step="0.5">
+        </div>
+
+        <div class="control-group">
+            <label>Điện trở (R): <span id="r-val">10</span> Ω</label>
+            <input type="range" id="r-range" min="1" max="20" value="10" step="0.5">
+        </div>
+
+        <div class="bulb-container">
+            <div class="bulb" id="bulb"></div>
+            <div style="font-size: 13px; color: #64748b; margin-top: 5px;">Bóng đèn mô phỏng</div>
+        </div>
+
+        <div class="result-box">
+            <div>Cường độ dòng điện (I = U / R):</div>
+            <div class="result-val"><span id="i-val">0.60</span> A</div>
+        </div>
+    </div>
+
+    <script>
+        const uRange = document.getElementById('u-range');
+        const rRange = document.getElementById('r-range');
+        const uVal = document.getElementById('u-val');
+        const rVal = document.getElementById('r-val');
+        const iVal = document.getElementById('i-val');
+        const bulb = document.getElementById('bulb');
+
+        function updateSimulation() {
+            const u = parseFloat(uRange.value);
+            const r = parseFloat(rRange.value);
+            const i = u / r;
+
+            uVal.textContent = u;
+            rVal.textContent = r;
+            iVal.textContent = i.toFixed(2);
+
+            // Cập nhật độ sáng bóng đèn theo dòng điện I
+            const brightness = Math.min(i / 1.2, 1); 
+            bulb.style.backgroundColor = `rgb(250, ${Math.floor(200 * brightness + 50)}, ${Math.floor(20 * brightness)})`;
+            bulb.style.boxShadow = `0 0 ${brightness * 35}px rgba(250, 204, 21, ${brightness})`;
+        }
+
+        uRange.addEventListener('input', updateSimulation);
+        rRange.addEventListener('input', updateSimulation);
+        updateSimulation();
+    </script>
+</body>
+</html>
